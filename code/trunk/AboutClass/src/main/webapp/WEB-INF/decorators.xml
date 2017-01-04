@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/layouts/">
+	<excludes>
+		<pattern>/static/*</pattern>
+		<pattern>/api/*</pattern>
+		
+		<pattern>/login</pattern>
+		<pattern>/valid</pattern>
+		
+		<pattern>/register</pattern>
+		<!-- <pattern>/test/test1</pattern> -->
+	</excludes>
+	<!-- 定义模版 -->
+	<decorator name="default" page="default.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+</decorators>

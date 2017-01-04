@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="false">
+
+	<!-- 权限管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="shiroDbRealm" />
+		<property name="sessionManager" ref="sessionManager" />
+		<!-- 缓存管理器 -->
+		<property name="cacheManager" ref="shiroCacheManager" />
+	</bean>
+	<!-- Realm -->
+	<bean id="shiroDbRealm" class="com.aboutClass.common.shiro.ShiroDbRealm">
+		<property name="userService" ref="userService"/>
+		<property name="userPackageService" ref="userPackageService"/>
+	</bean>
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- 超时时间 -->
+		<property name="globalSessionTimeout" value="3600000" />
+		<property name="sessionDAO" ref="shiroSessionDao" />
+		<property name="sessionIdCookie" ref="sharesession" />
+		<!-- 定时检查失效的session -->
+		<property name="sessionValidationSchedulerEnabled" value="true" />
+	</bean>
+
+	<bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg name="name" value="SHAREJSESSIONID" />
+	</bean>
+	<bean id="shiroSessionDao"
+		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO" />
+
+	<!-- 单机session -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+
+	<!-- session 集群 -->
+	<!-- <bean id="shiroCacheManager" class="org.springrain.frame.shiro.ShiroRedisCacheManager" 
+		> <property name="cached" ref="redisCached" /> </bean> -->
+	<bean id="kickoutSessionControlFilter" class="com.aboutClass.common.shiro.KickoutSessionControlFilter">
+		<property name="cacheManager" ref="shiroCacheManager" />
+		<property name="sessionManager" ref="sessionManager" />  <!-- 用于根据会话ID，获取会话进行踢出操作的； -->
+
+		<property name="kickoutAfter" value="false" />  <!-- 是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户； -->
+		<property name="maxSession" value="2" />  <!-- 同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录； -->
+		<property name="kickoutUrl" value="/getout" />  <!-- 被踢出后重定向到的地址； -->
+	</bean>
+
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login" />
+		<property name="successUrl" value="/view" />
+		<property name="unauthorizedUrl" value="/noAuth" />
+		<property name="filterChainDefinitions">
+			<value>
+				/static/** = anon
+				/static/css/** = anon
+				/static/fonts/** = anon
+				/static/html/** = anon
+				/static/images/** = anon
+				/static/script/** = anon
+				/static/views/** = anon
+				/layouts/*.jsp = anon
+				/static/plugIn/** = anon
+				
+
+				/favicon.ico = anon
+				/error/** = authc
+				/register = anon
+				/register/doRegister = anon
+				/panoramic/panoramic_notlog = anon
+				/login = anon
+				/valid = anon
+				/validAjax = anon
+				/getout = anon
+				/validCode = anon
+				/getCode = anon
+				/isUser = anon
+				/forget = anon
+				/reset/* = anon
+				/index/* = anon
+				/panoramic/panoramic_notlog = anon
+				/** = kickout,user
+			</value>
+		</property>
+		<!-- 声明自定义的过滤器 -->
+		<property name="filters">
+			<map>
+				<entry key="kickout" value-ref="kickoutSessionControlFilter" />
+			</map>
+		</property>
+	</bean>
+</beans>
