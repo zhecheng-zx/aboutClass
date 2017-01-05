@@ -18,8 +18,8 @@ import com.aboutClass.service.user.UsersLogsService;
  *@author zx
  */
 @Controller
-@RequestMapping(value = "/test")
-public class Test extends AbstractController {
+@RequestMapping(value = "/home")
+public class Home extends AbstractController {
 	@Autowired
 	private UserPackageService userPackageService;
 	@Autowired
@@ -31,8 +31,8 @@ public class Test extends AbstractController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="test1",method = { RequestMethod.POST, RequestMethod.GET })
+	@RequestMapping(value="index",method = { RequestMethod.POST, RequestMethod.GET })
 	public String panoramicNotLog( Model model,HttpServletRequest request,HttpServletResponse response) {
-		return "test/test";
+		return "account/index";
 	}
 }

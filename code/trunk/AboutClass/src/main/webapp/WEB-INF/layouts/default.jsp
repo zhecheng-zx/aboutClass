@@ -11,14 +11,17 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
 	<link href="${ctx }/static/vendor/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-	<link href="${ctx }/static/vendor/bootstrap-3.3.7/css/bootstrap-theme.min.css" rel="stylesheet" />
+	<%-- <link href="${ctx }/static/vendor/bootstrap-3.3.7/css/bootstrap-theme.min.css" rel="stylesheet" /> --%>
+	<link href="${ctx }/static/vendor/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+	<link href="${ctx }/static/vendor/icheck-1.x/skins/minimal/_all.css" rel="stylesheet" />
+	<script type="text/javascript" src="${ctx}/static/vendor/jquery/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="${ctx}/static/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${ctx}/static/vendor/icheck-1.x/icheck.min.js"></script>
 	<sitemesh:head />
 </head>
 <body class="gray-bg">
 	<%@ include file="/WEB-INF/layouts/header.jsp"%>
 	<sitemesh:body />
 	<%@ include file="/WEB-INF/layouts/footer.jsp"%>
-	<script type="text/javascript" src="${ctx}/static/vendor/jquery/jquery-3.1.1.js"></script>
-	<script type="text/javascript" src="${ctx}/static/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>
